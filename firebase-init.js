@@ -27,21 +27,24 @@ signInAnonymously(auth).catch(err => {
   readyResolve(false);
 });
 
-// Rastrear nuestras propias escrituras pendientes para no auto-sobrescribirnos
-// con el "eco" de confirmación que llega de vuelta desde Firestore
-const pendingWrites = {};
+// Rastrear TODAS nuestras escrituras pendientes (no solo la última) para no
+// auto-sobrescribirnos con el "eco" de confirmación que llega de Firestore,
+// incluso si hay varias escrituras seguidas a la misma clave.
+const pendingWrites = {}; // key -> array de JSON strings en vuelo
 
 window.cloudSync = {
   ready: readyPromise,
   set: async (key, value) => {
     const json = JSON.stringify(value);
-    pendingWrites[key] = json;
+    if (!pendingWrites[key]) pendingWrites[key] = [];
+    pendingWrites[key].push(json);
     try {
       await setDoc(doc(db, "datos", key), { value: json, updated: Date.now() });
       return true;
     } catch (err) {
       console.error("cloudSync.set error:", err);
-      delete pendingWrites[key];
+      const idx = pendingWrites[key].indexOf(json);
+      if (idx >= 0) pendingWrites[key].splice(idx, 1);
       return false;
     }
   },
@@ -50,13 +53,15 @@ window.cloudSync = {
       (snap) => {
         if (!snap.exists()) { callback([]); return; }
         const rawJson = snap.data().value;
-        // Si esta actualización coincide exactamente con algo que acabamos
-        // de escribir nosotros mismos, es solo el eco de confirmación:
-        // ya tenemos ese estado localmente, así que lo ignoramos sin
-        // volver a aplicarlo (evita pisar cambios más recientes en curso).
-        if (pendingWrites[key] === rawJson) {
-          delete pendingWrites[key];
-          return;
+        const queue = pendingWrites[key];
+        if (queue && queue.length) {
+          const idx = queue.indexOf(rawJson);
+          if (idx >= 0) {
+            // Es el eco de confirmación de una escritura nuestra en curso:
+            // ya tenemos ese estado (o uno más nuevo) localmente, ignorar.
+            queue.splice(idx, 1);
+            return;
+          }
         }
         try { callback(JSON.parse(rawJson)); }
         catch (e) { callback([]); }
