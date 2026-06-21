@@ -1,32 +1,18 @@
-AVÍCOLA PLOMES DEL DELTA - v9
+AVÍCOLA PLOMES DEL DELTA - v10
 =========================================================================
-NOVEDADES (sin cambios en las reglas de Firestore esta vez):
+NOVEDAD: Encargos de huevos (sin cambios en las reglas de Firestore)
 
-1. GRÁFICO INGRESOS VS GASTOS MENSUAL
-   En Gastos, gráfico de barras de los últimos 6 meses.
+En la pestaña Ventas, nuevo interruptor arriba "Ventas / Encargos":
 
-2. COSTE MEDIO Y COMPARATIVA ANUAL
-   En Datos: coste medio de pienso por animal y por huevo vendido,
-   y comparación del balance del año seleccionado vs el anterior.
+- ENCARGOS: anota quién te ha pedido huevos y cuántos, sin precio ni
+  fecha de venta todavía — solo la reserva. Verás un contador en
+  rojo con los pendientes.
 
-3. FICHA DE ANIMAL DESCARGABLE
-   En la ficha de cada animal (Gallinero), botón "Descargar ficha"
-   que genera un documento con foto, datos, tratamientos e historial
-   — ábrelo e imprime/guarda como PDF.
-
-4. SELECCIÓN MÚLTIPLE EN GALLINERO
-   Botón "Seleccionar" para marcar varios animales a la vez y darlos
-   de baja o borrarlos en bloque, en vez de uno a uno.
-
-5. CALENDARIO VISUAL DE INCUBACIONES
-   En Incubación, botón "Ver calendario" — vista mensual con todas
-   las fechas clave (inicio, nacedora, eclosión) marcadas con puntos
-   de color, navegable mes a mes.
-
-6. BACKUP AUTOMÁTICO EN LA NUBE
-   Ya no hace falta acordarse de pulsar el botón — la app guarda una
-   copia en la nube automáticamente una vez al día por dispositivo,
-   sin que tengas que hacer nada.
+- Cuando entregues el pedido, pulsa "✅ Pasar a venta" en el encargo:
+  se abre el formulario de venta con el cliente y la cantidad ya
+  rellenados, solo te falta poner el precio y guardar. El encargo
+  pasa a "completado" automáticamente (puedes verlos en un desplegable
+  abajo, o borrarlos).
 
 CÓMO ACTUALIZAR LA APP:
 -------------------------------------
