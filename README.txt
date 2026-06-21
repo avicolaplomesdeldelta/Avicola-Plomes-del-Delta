@@ -1,18 +1,13 @@
-AVÍCOLA PLOMES DEL DELTA - v10
+AVÍCOLA PLOMES DEL DELTA - v11
 =========================================================================
-NOVEDAD: Encargos de huevos (sin cambios en las reglas de Firestore)
+NOVEDAD: Especie y fecha de entrega en Encargos
 
-En la pestaña Ventas, nuevo interruptor arriba "Ventas / Encargos":
+Ahora cada encargo de huevos lleva:
+- Selector de especie con iconos (gallina, pato, perdiz, etc.)
+- Fecha de entrega deseada (opcional) — la tarjeta se pone en rojo
+  si está atrasada, o en ámbar si quedan 2 días o menos
 
-- ENCARGOS: anota quién te ha pedido huevos y cuántos, sin precio ni
-  fecha de venta todavía — solo la reserva. Verás un contador en
-  rojo con los pendientes.
-
-- Cuando entregues el pedido, pulsa "✅ Pasar a venta" en el encargo:
-  se abre el formulario de venta con el cliente y la cantidad ya
-  rellenados, solo te falta poner el precio y guardar. El encargo
-  pasa a "completado" automáticamente (puedes verlos en un desplegable
-  abajo, o borrarlos).
+Ejemplo: "2 docenas de huevos de perdiz para el 24/06/2026"
 
 CÓMO ACTUALIZAR LA APP:
 -------------------------------------
