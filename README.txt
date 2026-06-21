@@ -1,35 +1,32 @@
-AVÍCOLA PLOMES DEL DELTA - v8
+AVÍCOLA PLOMES DEL DELTA - v9
 =========================================================================
-NOVEDAD: Copia de seguridad EN LA NUBE (no en el móvil)
+NOVEDADES (sin cambios en las reglas de Firestore esta vez):
 
-En la pestaña Datos, nuevo botón "Guardar copia ahora en la nube".
-Guarda una instantánea completa de tus datos en Firebase, separada
-de los datos en uso. Si pierdes el móvil o se rompe, entras desde
-cualquier otro dispositivo con la contraseña y restauras la copia
-que quieras desde el listado "Copias guardadas".
+1. GRÁFICO INGRESOS VS GASTOS MENSUAL
+   En Gastos, gráfico de barras de los últimos 6 meses.
 
-IMPORTANTE - ACTUALIZA LAS REGLAS DE FIRESTORE:
--------------------------------------
-Hay una colección nueva "backups" que necesita permiso:
-1. console.firebase.google.com → tu proyecto → Firestore → Rules
-2. Sustituye todo por:
+2. COSTE MEDIO Y COMPARATIVA ANUAL
+   En Datos: coste medio de pienso por animal y por huevo vendido,
+   y comparación del balance del año seleccionado vs el anterior.
 
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /datos/{document} {
-      allow read, write: if request.auth != null;
-    }
-    match /fotos/{document} {
-      allow read, write: if request.auth != null;
-    }
-    match /backups/{document} {
-      allow read, write: if request.auth != null;
-    }
-  }
-}
+3. FICHA DE ANIMAL DESCARGABLE
+   En la ficha de cada animal (Gallinero), botón "Descargar ficha"
+   que genera un documento con foto, datos, tratamientos e historial
+   — ábrelo e imprime/guarda como PDF.
 
-3. Publish
+4. SELECCIÓN MÚLTIPLE EN GALLINERO
+   Botón "Seleccionar" para marcar varios animales a la vez y darlos
+   de baja o borrarlos en bloque, en vez de uno a uno.
+
+5. CALENDARIO VISUAL DE INCUBACIONES
+   En Incubación, botón "Ver calendario" — vista mensual con todas
+   las fechas clave (inicio, nacedora, eclosión) marcadas con puntos
+   de color, navegable mes a mes.
+
+6. BACKUP AUTOMÁTICO EN LA NUBE
+   Ya no hace falta acordarse de pulsar el botón — la app guarda una
+   copia en la nube automáticamente una vez al día por dispositivo,
+   sin que tengas que hacer nada.
 
 CÓMO ACTUALIZAR LA APP:
 -------------------------------------
