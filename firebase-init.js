@@ -1,7 +1,7 @@
 // Conexión a Firebase - se carga como módulo ES directo desde CDN en el navegador del usuario
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBktAFB2j6J4MaUk36-zJVEXoToEUit5YU",
@@ -30,7 +30,7 @@ signInAnonymously(auth).catch(err => {
 // Rastrear TODAS nuestras escrituras pendientes (no solo la última) para no
 // auto-sobrescribirnos con el "eco" de confirmación que llega de Firestore,
 // incluso si hay varias escrituras seguidas a la misma clave.
-const pendingWrites = {}; // key -> array de JSON strings en vuelo
+const pendingWrites = {};
 
 window.cloudSync = {
   ready: readyPromise,
@@ -56,17 +56,30 @@ window.cloudSync = {
         const queue = pendingWrites[key];
         if (queue && queue.length) {
           const idx = queue.indexOf(rawJson);
-          if (idx >= 0) {
-            // Es el eco de confirmación de una escritura nuestra en curso:
-            // ya tenemos ese estado (o uno más nuevo) localmente, ignorar.
-            queue.splice(idx, 1);
-            return;
-          }
+          if (idx >= 0) { queue.splice(idx, 1); return; }
         }
         try { callback(JSON.parse(rawJson)); }
         catch (e) { callback([]); }
       },
       (err) => { console.error("cloudSync.subscribe error:", err); callback(null); }
+    );
+  },
+  // Fotos: documentos individuales separados (cada uno con su propio límite de 1MB,
+  // evita que muchas fotos juntas hagan demasiado grande el documento principal)
+  setItem: async (coleccion, id, value) => {
+    try {
+      await setDoc(doc(db, coleccion, id), { value: JSON.stringify(value), updated: Date.now() });
+      return true;
+    } catch (err) { console.error("cloudSync.setItem error:", err); return false; }
+  },
+  subscribeCollection: (coleccion, callback) => {
+    return onSnapshot(collection(db, coleccion),
+      (snap) => {
+        const m = {};
+        snap.forEach(d => { try { m[d.id] = JSON.parse(d.data().value); } catch(e){} });
+        callback(m);
+      },
+      (err) => { console.error("cloudSync.subscribeCollection error:", err); }
     );
   }
 };
