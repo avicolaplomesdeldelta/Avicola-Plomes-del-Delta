@@ -1,13 +1,20 @@
-AVÍCOLA PLOMES DEL DELTA - v11
+AVÍCOLA PLOMES DEL DELTA - v12
 =========================================================================
-NOVEDAD: Especie y fecha de entrega en Encargos
+NOVEDAD: Encargos con varias especies en el mismo pedido
 
-Ahora cada encargo de huevos lleva:
-- Selector de especie con iconos (gallina, pato, perdiz, etc.)
-- Fecha de entrega deseada (opcional) — la tarjeta se pone en rojo
-  si está atrasada, o en ámbar si quedan 2 días o menos
+Ya no hace falta crear un encargo por cada especie. Un mismo encargo
+(mismo cliente, misma fecha de entrega) puede llevar varias líneas:
+"+ Añadir otra especie al pedido" dentro del formulario.
 
-Ejemplo: "2 docenas de huevos de perdiz para el 24/06/2026"
+Ejemplo: Ana pide 2 docenas de perdiz + 1 docena de gallina, todo en
+un único encargo.
+
+Cada línea se vende por separado con su propio botón "Pasar a venta"
+(porque pueden tener precios distintos). El encargo se marca como
+completado solo cuando TODAS sus líneas se han vendido.
+
+Los encargos antiguos (de antes de esta versión) se siguen viendo
+bien, no hace falta tocarlos.
 
 CÓMO ACTUALIZAR LA APP:
 -------------------------------------
