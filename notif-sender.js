@@ -110,7 +110,16 @@ async function main() {
   const suscripciones = [];
   disposSnap.forEach(doc => {
     const d = doc.data();
-    if (d.subscription) suscripciones.push({ id: doc.id, sub: d.subscription });
+    // La app guarda como { value: JSON.stringify({subscription, fecha}) }
+    try {
+      if (d.value) {
+        const parsed = JSON.parse(d.value);
+        if (parsed.subscription) suscripciones.push({ id: doc.id, sub: parsed.subscription });
+      } else if (d.subscription) {
+        // Formato antiguo por compatibilidad
+        suscripciones.push({ id: doc.id, sub: d.subscription });
+      }
+    } catch(e) { console.error('Error leyendo dispositivo', doc.id, e); }
   });
 
   if (suscripciones.length === 0) {
