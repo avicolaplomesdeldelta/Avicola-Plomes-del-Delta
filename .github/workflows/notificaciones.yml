@@ -1,3 +1,4 @@
+
 name: Enviar notificaciones diarias
 
 on:
@@ -8,6 +9,8 @@ on:
 jobs:
   notificar:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -20,3 +23,12 @@ jobs:
           VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
           VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
         run: node notif-sender.js
+
+      - name: Mantener workflow activo
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          echo "$(date)" > .last-notif
+          git add .last-notif
+          git diff --staged --quiet || git commit -m "chore: keep workflow active [skip ci]"
+          git push
