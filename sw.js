@@ -1,28 +1,25 @@
-// Service Worker - Avícola Plomes del Delta
-self.addEventListener('install', e => self.skipWaiting());
-self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+const CACHE = 'plomes-v145';
+const FILES = ['/', './index.html', './app.bundle.js', './firebase-init.js'];
 
-self.addEventListener('push', e => {
-  let data = { title: 'Avícola Plomes del Delta', body: 'Tienes avisos pendientes' };
-  try { if (e.data) data = e.data.json(); } catch(err) {}
-  
+self.addEventListener('install', e => {
+  self.skipWaiting();
   e.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: '/Avicola-Plomes-del-Delta/icon-192.png',
-      tag: data.tag || 'plomes',
-      vibrate: [200, 100, 200],
-      silent: false
-    })
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    ).then(() => caches.open(CACHE).then(c => c.addAll(FILES).catch(() => {})))
   );
 });
 
-self.addEventListener('notificationclick', e => {
-  e.notification.close();
+self.addEventListener('activate', e => {
   e.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(cs => {
-      if (cs.length > 0) return cs[0].focus();
-      return clients.openWindow('/Avicola-Plomes-del-Delta/');
-    })
+    clients.claim().then(() =>
+      clients.matchAll({type:'window'}).then(ws => ws.forEach(w => w.navigate(w.url)))
+    )
+  );
+});
+
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(r => r || fetch(e.request))
   );
 });
