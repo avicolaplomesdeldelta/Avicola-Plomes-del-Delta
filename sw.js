@@ -1,4 +1,4 @@
-const CACHE = 'plomes-v151';
+const CACHE = 'plomes-v152';
 const FILES = ['/', './index.html', './app.bundle.js', './firebase-init.js'];
 
 self.addEventListener('install', e => {
